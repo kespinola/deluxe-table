@@ -1,5 +1,5 @@
 {
-  "name": "perfect-table",
+  "name": "deluxe-table",
   "version": "0.0.1",
   "description": "composible react table",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ksespinola/react-redux-calculator.git"
+    "url": "git+ssh://git@github.com/ksespinola/deluxe.git"
   },
   "keywords": [
     "react",
@@ -20,9 +20,9 @@
   "author": "Kyle Espinola",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ksespinola/perfect-table/issues"
+    "url": "https://github.com/ksespinola/deluxe/issues"
   },
-  "homepage": "https://github.com/ksespinola/perfect-table#readme",
+  "homepage": "https://github.com/ksespinola/deluxe#readme",
   "devDependencies": {
     "autoprefixer-core": "^6.0.1",
     "babel-core": "^6.7.6",

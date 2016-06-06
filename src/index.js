@@ -21,7 +21,7 @@ const TableApp = () => (
         Header: () => <Cell Component="th">First Name</Cell>,
       },
       {
-        name: 'first_name',
+        name: 'last_name',
         Header: () => <Cell Component="th">Last Name</Cell>,
       },
       {
