@@ -42,12 +42,14 @@ A compossible and extendable react table component.
   export default ConnectTableApp
 ```
 
-## Component Configuration
+### Component Types
 
-### ColumnDefinition
+### Column Definition
 - `name: String` - column name
 - `Header: Component` - component for column header
 - `Cell: Component` - component for column cell
+
+## Component Configuration
 
 ### Table
 - `data: Immutable.List` - single list level list of records to display
