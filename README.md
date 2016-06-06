@@ -6,15 +6,14 @@ A compossible and extendable react table component.
 ```
   import React from 'react';
   import { fromJS } from 'immutable';
-  import Table from './components/Table';
-  import Cell from './components/Cell';
-  import container from './module/container.jsx';
+  import {Table, Cell, deluxeTable } from 'deluxe-table';
   import data from './data.json';
 
   const dataList = fromJS(data);
 
-  const TableApp = () => (
+  const TableApp = ({ deluxeTable }) => (
     <Table
+      {...deluxeTable}
       data={dataList}
       columns={[
         {
@@ -37,12 +36,12 @@ A compossible and extendable react table component.
     />
   );
 
-  const ConnectTableApp = container(TableApp);
+  const ConnectTableApp = deluxeTable(TableApp);
 
-  export default ConnectTableApp
+  export default ConnectTableApp;
 ```
 
-### Component Types
+## Component Types
 
 ### Column Definition
 - `name: String` - column name
@@ -55,7 +54,7 @@ A compossible and extendable react table component.
 - `data: Immutable.List` - single list level list of records to display
 - `columns: [ColumnDefinition]` - single list level list of records to display
 
-### Milestones
+## Milestones
 - [ ] Base Components:
     - [X] Table
     - [X] Cell
