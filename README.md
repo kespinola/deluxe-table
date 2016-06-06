@@ -36,7 +36,7 @@ A compossible and extendable react table component.
     />
   );
 
-  const ConnectTableApp = deluxeTable(TableApp);
+  const ConnectTableApp = deluxeTable({ name })(TableApp);
 
   export default ConnectTableApp;
 ```
