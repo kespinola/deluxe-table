@@ -1,44 +1,54 @@
 # Deluxe Table
 A compossible and extendable react table component.
 
-## How It Works
+## How To Use
 
 ```
   import React from 'react';
   import { fromJS } from 'immutable';
-  import {Table, Cell, deluxeTable } from 'deluxe-table';
+  import { Table, Cell } from 'deluxe-table';
   import data from './data.json';
 
   const dataList = fromJS(data);
 
-  const TableApp = ({ deluxeTable }) => (
+  const TableApp = ({}) => (
     <Table
-      {...deluxeTable}
+      scope="table-app"
+      rowHeight={30}
+      headerHeight={30}
+      width={600}
+      height={500}
       data={dataList}
       columns={[
         {
           name: 'first_name',
-          Header: () => <Cell Component="th">First Name</Cell>,
+          header: <Cell>First Name</Cell>,
+          cell: <Cell />,
+          width: 150,
         },
         {
           name: 'last_name',
-          Header: () => <Cell Component="th">Last Name</Cell>,
+          header: <Cell>Last Name</Cell>,
+          cell: <Cell />,
+          width: 150,
         },
         {
           name: 'gender',
-          Header: () => <Cell Component="th">Gender</Cell>,
+          header: <Cell>Gender</Cell>,
+          cell: <Cell />,
+          width: 150,
         },
         {
           name: 'email',
-          Header: () => <Cell Component="th">Email</Cell>,
+          header: <Cell>Email</Cell>,
+          cell: <Cell />,
+          width: 250,
         },
       ]}
     />
   );
 
-  const ConnectTableApp = deluxeTable({ name })(TableApp);
-
-  export default ConnectTableApp;
+  export default TableApp;
 ```
 
 ## Component Types
@@ -51,14 +61,20 @@ A compossible and extendable react table component.
 ## Component Configuration
 
 ### Table
-- `data: Immutable.List` - single list level list of records to display
+- `scope: String - required` - key used in reducer to namespace state for the instance
+- `data: Immutable.List - required` - single list level list of records to display
+- `rowHeight: Number` - height of table wrapper
+- `headerHeight: Number` - height of the table header
+- `width: Number` - width of table wrapper
+- `height: Number` - height of table wrapper
 - `columns: [ColumnDefinition]` - single list level list of records to display
 
 ## Milestones
-- [ ] Base Components:
+- [X] Base Components:
     - [X] Table
     - [X] Cell
-- [ ] Sticky Table Header
+- [X] Sticky Table Header
+- [ ] Basic Scrolling
 - [ ] Grouping Features:
   - [ ] N-level
   - [ ] Sticky sub headers

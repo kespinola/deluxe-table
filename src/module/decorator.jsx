@@ -15,8 +15,9 @@ const mapDispatch = (dispatch, { scope }) => ({
 const deluxeTable = Component => {
   class DecoratedComponent extends React.Component {
     componentDidMount() {
-      debugger;
       hamster(findDOMNode(this)).wheel((event, delta, deltaX, deltaY) => {
+        event.preventDefault();
+        event.stopPropagation();
         this.props.actions.onScrollTable({ deltaX, deltaY })
       });
     }

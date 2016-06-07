@@ -24,6 +24,7 @@ const Table = ({
   headerHeight,
   rowHeight,
   scrollY,
+  scrollX,
 }) => {
   const totalWidth = sumColumnWidth(columns);
   return (
@@ -33,7 +34,11 @@ const Table = ({
     >
       <div style={{ width: totalWidth }}>
         <div
-          style={{ height: headerHeight, width: totalWidth }}
+          style={{
+            height: headerHeight,
+            width: totalWidth,
+            transform: `translate3d(${scrollX}px, 0px, 0px)`,
+          }}
           className={cx(headerClassName, styles.header)}
         >
           {columns.map(({ header, name, width: columnWidth }, i) => (
@@ -52,7 +57,7 @@ const Table = ({
         </div>
         <div
           className={styles.row_wrapper}
-          style={{ transform: `translate3d(0px, ${scrollY}px, 0px)` }}
+          style={{ transform: `translate3d(${scrollX}px, ${scrollY}px, 0px)` }}
         >
           {data.map((row, i) => {
             return (
