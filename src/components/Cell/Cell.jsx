@@ -1,9 +1,24 @@
 import React, { PropTypes } from 'react'
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-const Cell = ({ children, Component, data, rowIndex, name }) => {
+const Cell = ({
+  children,
+  Component,
+  data,
+  rowIndex,
+  name,
+  style,
+  className,
+}) => {
   return (
-    <Component>{children || data.getIn([rowIndex, name])}</Component>
+    <Component
+      {...{
+        className,
+        style,
+      }}
+    >
+      {children || data.getIn([rowIndex, name])}
+    </Component>
   );
 };
 
@@ -14,7 +29,7 @@ Cell.propTypes = {
 };
 
 Cell.defaultProps = {
-  Component: 'td',
+  Component: 'div',
 };
 
 export default Cell;

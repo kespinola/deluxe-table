@@ -1,47 +1,81 @@
 import React, { PropTypes } from 'react'
+import cx from 'classnames';
+import { sum, pluck, compose } from 'ramda';
 import styles from './table.css';
-import Cell from './../Cell';
+import deluxeTable from './../../module/decorator';
 
-const Table = ({ className, columns, data, DefaultCell, idField, maxHeight }) => {
+const sumColumnWidth = compose(
+  sum,
+  pluck('width')
+);
+
+const Table = ({
+  className,
+  columns,
+  data,
+  defaultCell,
+  idField,
+  maxHeight,
+  cssPrefix,
+  rowClassName,
+  headerClassName,
+  height,
+  width,
+  headerHeight,
+  rowHeight,
+  scrollY,
+}) => {
+  const totalWidth = sumColumnWidth(columns);
   return (
-    <div>
-      <table className={className}>
-        <thead>
-          <tr>
-            {columns.map(({ Header, name }, i) => (
-              <Header key={name} data={data} rowIndex={i} name={name} />
-            ))}
-          </tr>
-        </thead>
-      </table>
-      <table className={className}>
-        <thead>
-          <tr>
-            {columns.map(({ Header, name }, i) => (
-              <Header key={name} data={data} rowIndex={i} name={name} />
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-            {data.map((row, i) => {
-              return (
-                <tr key={row.get(idField)}>
-                  {columns.map(({ name, Cell }) => {
-                    const CurrentCell = (Cell || DefaultCell);
-                    return (
-                      <CurrentCell
-                        key={`${name}_${row.get(idField)}`}
-                        data={data}
-                        rowIndex={i}
-                        name={name}
-                      />
-                    );
-                  })}
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
+    <div
+      className={cx(className, styles.table)}
+      style={{ height, width }}
+    >
+      <div style={{ width: totalWidth }}>
+        <div
+          style={{ height: headerHeight, width: totalWidth }}
+          className={cx(headerClassName, styles.header)}
+        >
+          {columns.map(({ header, name, width: columnWidth }, i) => (
+            React.cloneElement(
+              header,
+              {
+                data,
+                name,
+                key: name,
+                rowIndex: i,
+                style: { height: headerHeight, width: columnWidth },
+                className: styles.header_cell,
+              }
+            )
+          ))}
+        </div>
+        <div
+          className={styles.row_wrapper}
+          style={{ transform: `translate3d(0px, ${scrollY}px, 0px)` }}
+        >
+          {data.map((row, i) => {
+            return (
+              <div
+                key={row.get(idField)}
+                className={cx(rowClassName, 'deluxe__row')}
+                style={{ width: totalWidth }}
+              >
+                {columns.map(({ name, cell: columnCell, width: columnWidth }) => {
+                  return React.cloneElement(columnCell, {
+                    key: `${name}_${row.get(idField)}`,
+                    data,
+                    name,
+                    rowIndex: i,
+                    style: { height: rowHeight, width: columnWidth },
+                    className: styles.body_cell,
+                  });
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };
@@ -53,10 +87,12 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
-  className: 'pure-table',
-  DefaultCell: Cell,
+  className: 'deluxe__table_app',
   idField: 'id',
   maxHeight: 700,
+  cssPrefix: 'deluxe',
+  rowClassName: '',
+  headerClassName: '',
 };
 
-export default Table;
+export default deluxeTable(Table);

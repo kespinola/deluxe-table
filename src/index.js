@@ -1,47 +1,62 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, combineReducers } from 'redux';
 import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
-import Table from './components/Table';
-import Cell from './components/Cell';
-import container from './module/container.jsx';
-import reducer from './module/duck';
+import { Table, Cell } from './components';
+import deluxeTableReducer from './module/duck';
 import data from './data.json';
 
-const store = createStore(reducer, {});
+const reducer = combineReducers({
+  deluxeTable: deluxeTableReducer,
+});
+
+const store = createStore(reducer);
+
 const dataList = fromJS(data);
 
 const TableApp = () => (
   <Table
+    scope="table-app"
+    rowHeight={30}
+    headerHeight={30}
+    width={600}
+    height={500}
     data={dataList}
     columns={[
       {
         name: 'first_name',
-        Header: () => <Cell Component="th">First Name</Cell>,
+        header: <Cell>First Name</Cell>,
+        cell: <Cell />,
+        width: 150,
       },
       {
         name: 'last_name',
-        Header: () => <Cell Component="th">Last Name</Cell>,
+        header: <Cell>Last Name</Cell>,
+        cell: <Cell />,
+        width: 150,
       },
       {
         name: 'gender',
-        Header: () => <Cell Component="th">Gender</Cell>,
+        header: <Cell>Gender</Cell>,
+        cell: <Cell />,
+        width: 150,
       },
       {
         name: 'email',
-        Header: () => <Cell Component="th">Email</Cell>,
+        header: <Cell>Email</Cell>,
+        cell: <Cell />,
+        width: 250,
       },
     ]}
   />
 );
 
-const ConnectTableApp = container(TableApp);
 
 document.addEventListener('DOMContentLoaded', () => {
   render(
     <Provider store={store}>
-      <ConnectTableApp />
+      <TableApp />
     </Provider>
     ,
     document.getElementById('root')
