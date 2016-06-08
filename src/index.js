@@ -21,7 +21,7 @@ const TableApp = () => (
     className={styles.table_app}
     scope="table-app"
     rowHeight={30}
-    headerHeight={30}
+    headerHeight={40}
     width={600}
     height={500}
     data={dataList}

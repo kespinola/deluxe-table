@@ -6,8 +6,6 @@ const { HOST, PORT } = process.env;
 
 const compiler = webpack(config);
 
-console.info('Starting development server. Please wait...');
-
 const server = new WebpackDevServer(compiler, {
 
   // The rest is terminal configurations

@@ -25,10 +25,9 @@ const deluxeTable = Component => {
         const { actions: { changeXCoordinate, changeYCoordinate } } = this.props;
         event.preventDefault();
         event.stopPropagation();
-
-        if (Math.abs(deltaY) > 0) {
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
           changeYCoordinate(deltaY);
-        } else if (Math.abs(deltaX) > 0) {
+        } else {
           changeXCoordinate(deltaX);
         }
       });

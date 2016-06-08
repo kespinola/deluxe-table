@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import cx from 'classnames';
-import { sum, pluck, compose, subtract, add, negate } from 'ramda';
+import { sum, pluck, compose, subtract, add, negate, divide, multiply } from 'ramda';
+import Scrollbar from './../Scrollbar';
 import styles from './table.css';
 import deluxeTable from './../../module/decorator';
 
@@ -26,19 +27,22 @@ const Table = ({
   scrollY,
   scrollX,
 }) => {
-  const totalWidth = sumColumnWidth(columns);
-  const overflowX = subtract(totalWidth, width);
+  const bodyWidth = sumColumnWidth(columns);
+  const viewPortHeight = height - headerHeight;
+  const bodyHeight = multiply(data.count(), rowHeight);
+  const bodyOutOfView = bodyHeight - viewPortHeight;
+  const overflowX = subtract(bodyWidth, width);
   const finalScrollX = add(overflowX, scrollX) < 0 ? negate(overflowX) : scrollX;
   return (
     <div
       className={cx(className, styles.table)}
       style={{ height, width }}
     >
-      <div style={{ width: totalWidth }}>
+      <div style={{ width: bodyWidth }}>
         <div
           style={{
             height: headerHeight,
-            width: totalWidth,
+            width: bodyWidth,
             transform: `translate3d(${finalScrollX}px, 0px, 0px)`,
           }}
           className={cx(headerClassName, styles.header)}
@@ -52,11 +56,22 @@ const Table = ({
                 key: name,
                 rowIndex: i,
                 style: { height: headerHeight, width: columnWidth },
-                className: styles.header_cell,
+                className: cx('deluxe__header__cell', styles.header_cell),
               }
             )
           ))}
         </div>
+        <Scrollbar
+          axis="horizontal"
+          sliderSize={width - subtract(bodyWidth, width)}
+          onDragBar={null}
+        />
+        <Scrollbar
+          axis="vertical"
+          top={headerHeight}
+          sliderSize={divide(bodyOutOfView, viewPortHeight)}
+          onDragBar={null}
+        />
         <div
           className={styles.row_wrapper}
           style={{ transform: `translate3d(${finalScrollX}px, ${scrollY}px, 0px)` }}
@@ -66,14 +81,14 @@ const Table = ({
               <div
                 key={row.get(idField)}
                 className={cx(rowClassName, styles.body_row)}
-                style={{ width: totalWidth }}
+                style={{ width: bodyWidth }}
               >
                 {columns.map(({ name, cell: columnCell, width: columnWidth }) => {
                   return React.cloneElement(columnCell, {
                     data,
                     name,
                     rowIndex: i,
-                    className: styles.body_cell,
+                    className: cx('deluxe__body_cell', styles.body_cell),
                     key: `${name}_${row.get(idField)}`,
                     style: { height: rowHeight, width: columnWidth },
                   });
