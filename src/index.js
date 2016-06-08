@@ -5,6 +5,7 @@ import { fromJS } from 'immutable';
 import { Provider } from 'react-redux';
 import { Table, Cell } from './components';
 import deluxeTableReducer from './module/duck';
+import styles from './assets/styles/app.css';
 import data from './data.json';
 
 const reducer = combineReducers({
@@ -17,6 +18,7 @@ const dataList = fromJS(data);
 
 const TableApp = () => (
   <Table
+    className={styles.table_app}
     scope="table-app"
     rowHeight={30}
     headerHeight={30}

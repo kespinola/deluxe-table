@@ -5,9 +5,9 @@ import { scrollTable } from './duck';
 import selector from './selector';
 import hamster from 'hamsterjs';
 
-const mapDispatch = (dispatch, { scope }) => ({
+const mapDispatch = (dispatch, { scope, headerHeight }) => ({
   actions: {
-    onScrollTable: (e) => dispatch(scrollTable({ scope, e })),
+    onScrollTable: (e) => dispatch(scrollTable({ scope, e, yBound: headerHeight })),
   },
 });
 

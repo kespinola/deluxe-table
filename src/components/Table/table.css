@@ -1,11 +1,20 @@
 .table {
   overflow: hidden;
   position: relative;
+  box-sizing: border-box;
 }
 
 .cell {
   display: inline-block;
   vertical-align: middle;
+  box-sizing: border-box;
+  border-right: 1px solid black;
+}
+
+.body_row {
+  &:nth-child(2n + 1) {
+    background: #EFEFEF;
+  }
 }
 
 .header {

@@ -7,19 +7,19 @@ export const scrollTable = payload => ({
   payload,
 });
 
-const updateCoordinate = delta => compose(
+const updateCoordinate = (bound, delta) => compose(
   ifElse(
-    cord => cord > 0,
-    () => 0,
+    cord => cord > bound,
+    () => bound,
     cord => cord
   ),
   add(delta)
 );
 
-const handleScrollTable = (state, { scope, e: { deltaX, deltaY } }) => {
+const handleScrollTable = (state, { scope, e: { deltaX, deltaY }, yBound, xBound }) => {
   return state
-    .updateIn([scope, 'scrollX'], 0, updateCoordinate(deltaX))
-    .updateIn([scope, 'scrollY'], 0, updateCoordinate(deltaY));
+    .updateIn([scope, 'scrollX'], 0, updateCoordinate(0, deltaX))
+    .updateIn([scope, 'scrollY'], yBound, updateCoordinate(yBound, deltaY));
 };
 
 export const reducer = (state = new Map(), { type, payload }) => {

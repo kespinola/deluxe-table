@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import cx from 'classnames';
-import { sum, pluck, compose } from 'ramda';
+import { sum, pluck, compose, subtract, add, negate } from 'ramda';
 import styles from './table.css';
 import deluxeTable from './../../module/decorator';
 
@@ -27,6 +27,8 @@ const Table = ({
   scrollX,
 }) => {
   const totalWidth = sumColumnWidth(columns);
+  const overflowX = subtract(totalWidth, width);
+  const finalScrollX = add(overflowX, scrollX) < 0 ? negate(overflowX) : scrollX;
   return (
     <div
       className={cx(className, styles.table)}
@@ -37,7 +39,7 @@ const Table = ({
           style={{
             height: headerHeight,
             width: totalWidth,
-            transform: `translate3d(${scrollX}px, 0px, 0px)`,
+            transform: `translate3d(${finalScrollX}px, 0px, 0px)`,
           }}
           className={cx(headerClassName, styles.header)}
         >
@@ -57,13 +59,13 @@ const Table = ({
         </div>
         <div
           className={styles.row_wrapper}
-          style={{ transform: `translate3d(${scrollX}px, ${scrollY}px, 0px)` }}
+          style={{ transform: `translate3d(${finalScrollX}px, ${scrollY}px, 0px)` }}
         >
           {data.map((row, i) => {
             return (
               <div
                 key={row.get(idField)}
-                className={cx(rowClassName, 'deluxe__row')}
+                className={cx(rowClassName, styles.body_row)}
                 style={{ width: totalWidth }}
               >
                 {columns.map(({ name, cell: columnCell, width: columnWidth }) => {
@@ -92,7 +94,7 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
-  className: 'deluxe__table_app',
+  className: 'deluxe__table__app',
   idField: 'id',
   maxHeight: 700,
   cssPrefix: 'deluxe',
