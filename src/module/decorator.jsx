@@ -1,13 +1,19 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
-import { scrollTable } from './duck';
+import {
+  changeYCoordinate,
+  changeXCoordinate,
+} from './duck';
 import selector from './selector';
 import hamster from 'hamsterjs';
 
 const mapDispatch = (dispatch, { scope, headerHeight }) => ({
   actions: {
-    onScrollTable: (e) => dispatch(scrollTable({ scope, e, yBound: headerHeight })),
+    changeYCoordinate:
+      change => dispatch(changeYCoordinate({ scope, bound: headerHeight, change })),
+    changeXCoordinate:
+      change => dispatch(changeXCoordinate({ scope, bound: 0, change })),
   },
 });
 
@@ -16,9 +22,15 @@ const deluxeTable = Component => {
   class DecoratedComponent extends React.Component {
     componentDidMount() {
       hamster(findDOMNode(this)).wheel((event, delta, deltaX, deltaY) => {
+        const { actions: { changeXCoordinate, changeYCoordinate } } = this.props;
         event.preventDefault();
         event.stopPropagation();
-        this.props.actions.onScrollTable({ deltaX, deltaY })
+
+        if (Math.abs(deltaY) > 0) {
+          changeYCoordinate(deltaY);
+        } else if (Math.abs(deltaX) > 0) {
+          changeXCoordinate(deltaX);
+        }
       });
     }
 

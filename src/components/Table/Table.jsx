@@ -70,12 +70,12 @@ const Table = ({
               >
                 {columns.map(({ name, cell: columnCell, width: columnWidth }) => {
                   return React.cloneElement(columnCell, {
-                    key: `${name}_${row.get(idField)}`,
                     data,
                     name,
                     rowIndex: i,
-                    style: { height: rowHeight, width: columnWidth },
                     className: styles.body_cell,
+                    key: `${name}_${row.get(idField)}`,
+                    style: { height: rowHeight, width: columnWidth },
                   });
                 })}
               </div>
