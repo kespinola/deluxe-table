@@ -10,6 +10,8 @@ const sumColumnWidth = compose(
   pluck('width')
 );
 
+const getTranslate = (x = 0, y = 0, z = 0) => `translate3d(${x}px, ${y}px, ${z}px)`;
+
 const Table = ({
   className,
   columns,
@@ -43,7 +45,7 @@ const Table = ({
           style={{
             height: headerHeight,
             width: bodyWidth,
-            transform: `translate3d(${finalScrollX}px, 0px, 0px)`,
+            transform: getTranslate(finalScrollX),
           }}
           className={cx(headerClassName, styles.header)}
         >
@@ -65,16 +67,18 @@ const Table = ({
           axis="horizontal"
           sliderSize={width - subtract(bodyWidth, width)}
           onDragBar={null}
+          transform={`0px, 0px, 0px`}
         />
         <Scrollbar
           axis="vertical"
           top={headerHeight}
           sliderSize={divide(bodyOutOfView, viewPortHeight)}
+          transform={getTranslate(0, negate(scrollY))}
           onDragBar={null}
         />
         <div
           className={styles.row_wrapper}
-          style={{ transform: `translate3d(${finalScrollX}px, ${scrollY}px, 0px)` }}
+          style={{ transform: getTranslate(finalScrollX, scrollY) }}
         >
           {data.map((row, i) => {
             return (

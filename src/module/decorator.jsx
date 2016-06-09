@@ -7,6 +7,7 @@ import {
 } from './duck';
 import selector from './selector';
 import hamster from 'hamsterjs';
+import flyd from 'flyd';
 
 const mapDispatch = (dispatch, { scope, headerHeight }) => ({
   actions: {
@@ -21,16 +22,40 @@ const mapDispatch = (dispatch, { scope, headerHeight }) => ({
 const deluxeTable = Component => {
   class DecoratedComponent extends React.Component {
     componentDidMount() {
-      hamster(findDOMNode(this)).wheel((event, delta, deltaX, deltaY) => {
-        const { actions: { changeXCoordinate, changeYCoordinate } } = this.props;
+      const { actions: { changeXCoordinate, changeYCoordinate } } = this.props;
+      const el = findDOMNode(this);
+      const wheel$ = flyd.stream();
+      const mouseDown$ = flyd.stream(false);
+      const mouseMove$ = flyd.stream(false);
+      el.addEventListener('mousemove', mouseMove$);
+      el.addEventListener('mousedown', () => mouseDown$(true));
+      el.addEventListener('mouseup', () => mouseDown$(false));
+
+      const drag$ = flyd.combine(
+        (mouseDown, mouseMove, self, updated) => {
+          if (mouseDown()) {
+            self(mouseMove());
+          }
+        },
+        [mouseDown$, mouseMove$]
+      );
+
+      flyd.map((mouseMove) => {
+        console.log(mouseMove.offsetY, mouseMove.offsetX, mouseMove.movementY, mouseMove.movementX);
+      }, drag$);
+
+      hamster(el).wheel((event, delta, deltaX, deltaY) => {
         event.preventDefault();
         event.stopPropagation();
-        if (Math.abs(deltaY) > Math.abs(deltaX)) {
-          changeYCoordinate(deltaY);
-        } else {
-          changeXCoordinate(deltaX);
-        }
+        wheel$({ deltaX, deltaY });
       });
+
+      flyd.map(({ deltaX, deltaY }) => {
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+          return changeYCoordinate(deltaY);
+        }
+        return changeXCoordinate(deltaX);
+      }, wheel$);
     }
 
     render() {

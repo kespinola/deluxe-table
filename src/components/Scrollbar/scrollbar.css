@@ -7,7 +7,7 @@
 
 .horizontal_bar_wrapper {
   composes: bar_wrapper;
-  height: 20px;
+  height: 15px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -17,7 +17,7 @@
   composes: bar_wrapper;
   right: 0;
   bottom: 0;
-  width: 20px;
+  width: 15px;
 }
 
 .bar {
@@ -26,10 +26,10 @@
 
 .horizontal_bar {
   composes: bar;
-  height: 20px;
+  height: 15px;
 }
 
 .vertical_bar {
   composes: bar;
-  width: 20px;
+  width: 15px;
 }
