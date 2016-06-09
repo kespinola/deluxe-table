@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register",
-    "dev": "node -r babel-core/register -r dotenv/config scripts/webpack"
+    "build:docs": "NODE_ENV=production webpack -p --config scripts/webpack/webpack.config.js src/index.js",
+    "dev": "NODE_ENV=development node -r babel-core/register -r dotenv/config scripts/webpack"
   },
   "repository": {
     "type": "git",
@@ -35,9 +36,9 @@
     "chai": "^3.5.0",
     "css-loader": "^0.23.1",
     "dotenv": "^2.0.0",
+    "eslint": "^2.4.0",
     "eslint-config-airbnb": "^6.1.0",
     "eslint-plugin-react": "^4.2.3",
-    "eslint": "^2.4.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.5",
     "json-loader": "^0.5.4",
@@ -51,8 +52,8 @@
     "react-transform-hmr": "^1.0.4",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.0",
-    "webpack-dev-server": "^1.14.1",
-    "webpack": "^2.1.0-beta.5"
+    "webpack": "^2.1.0-beta.5",
+    "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
     "hamsterjs": "^1.1.2",

@@ -1,11 +1,16 @@
 import { Map } from 'immutable';
 import { add, ifElse, compose } from 'ramda';
-const SCROLL_TABLE = 'deluxeTable/SCROLL_TABLE';
 
-export const scrollTable = payload => ({
-  type: SCROLL_TABLE,
+const CHANGE_Y_COORDINATE = 'deluxeTable/CHANGE_Y_COORDINATE';
+const CHANGE_X_COORDINATE = 'deluxeTable/CHANGE_X_COORDINATE';
+
+const createAction = type => payload => ({
+  type,
   payload,
 });
+
+export const changeYCoordinate = createAction(CHANGE_Y_COORDINATE);
+export const changeXCoordinate = createAction(CHANGE_X_COORDINATE);
 
 const updateCoordinate = (bound, delta) => compose(
   ifElse(
@@ -16,16 +21,20 @@ const updateCoordinate = (bound, delta) => compose(
   add(delta)
 );
 
-const handleScrollTable = (state, { scope, e: { deltaX, deltaY }, yBound, xBound }) => {
+const handleCoordindateChange = cordKey => (state, { scope, change, bound }) => {
   return state
-    .updateIn([scope, 'scrollX'], 0, updateCoordinate(0, deltaX))
-    .updateIn([scope, 'scrollY'], yBound, updateCoordinate(yBound, deltaY));
+    .updateIn([scope, cordKey], bound, updateCoordinate(bound, change));
 };
+
+const handleYChange = handleCoordindateChange('scrollY');
+const handleXChange = handleCoordindateChange('scrollX');
 
 export const reducer = (state = new Map(), { type, payload }) => {
   switch (type) {
-    case SCROLL_TABLE:
-      return handleScrollTable(state, payload);
+    case CHANGE_Y_COORDINATE:
+      return handleYChange(state, payload);
+    case CHANGE_X_COORDINATE:
+      return handleXChange(state, payload);
     default:
       return state;
   }

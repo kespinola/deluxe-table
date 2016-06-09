@@ -1,26 +1,19 @@
-import webpack from 'webpack';
-import AutoPrefixCore from 'autoprefixer-core';
-import Rebeccapurple from 'postcss-color-rebeccapurple';
-import SimpleVariables from 'postcss-simple-vars';
-import NextCSS from 'postcss-cssnext';
-import { join } from 'path';
+const webpack = require('webpack');
+const Rebeccapurple = require('postcss-color-rebeccapurple');
+const SimpleVariables = require('postcss-simple-vars');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const NextCSS = require('postcss-cssnext');
+const path = require('path');
 
-const { HOST, PORT } = process.env;
+const HOST = process.env.HOST;
+const PORT = process.env.PORT;
 
-export default {
+const config = {
 
-  context: join(__dirname, '/../../src'),
-
-  entry: {
-    bundle: [
-      `webpack-dev-server/client?http://${HOST}:${PORT}`,
-      'webpack/hot/dev-server',
-      './index.js',
-    ],
-  },
+  context: path.join(__dirname, '/../../src'),
 
   output: {
-    path: '/build/',
+    path: 'build',
     filename: '[name].js',
     publicPath: `http://${HOST}:${PORT}/build/`,
     devtoolModuleFilenameTemplate: '/[absolute-resource-path]',
@@ -35,11 +28,11 @@ export default {
       },
       {
         test: [/\.css$/],
-        loaders: [
+        loaders: ExtractTextPlugin.extract(
           'style',
           'css?modules&importLoaders=1',
-          'postcss',
-        ],
+          'postcss'
+        ),
       },
       {
         test: /\.json$/,
@@ -57,7 +50,6 @@ export default {
   },
 
   postcss: [
-    AutoPrefixCore,
     Rebeccapurple,
     SimpleVariables,
     NextCSS,
@@ -76,13 +68,30 @@ export default {
     process: true,
   },
 
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-  ],
-
   debug: true,
 
   devtool: 'eval-source-map',
 
+  plugins: [
+    new ExtractTextPlugin('styles.css'),
+  ],
+
 };
+
+if (process.env.NODE_ENV === 'development') {
+  config.plugins = config.plugins.concat([
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
+  ]);
+  config.entry = {
+    main: [
+      `webpack-dev-server/client?http://${HOST}:${PORT}`,
+      'webpack/hot/dev-server',
+      './index.js',
+    ],
+  };
+
+  config.output.path = '/build';
+}
+
+module.exports = config;
